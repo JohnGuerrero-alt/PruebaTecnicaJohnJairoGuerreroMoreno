@@ -5,6 +5,7 @@ import  {listaCiudades} from '../../../modules/listas';
 import { Constantes} from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
 import { Observable } from 'rxjs';
+import {map} from 'rxjs/operators';
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -28,6 +29,7 @@ export class MisdireccionesComponent implements OnInit {
   comprobacion: any;
   todo: any;
   value: any;
+  info: any;
 
 
 
@@ -63,11 +65,15 @@ export class MisdireccionesComponent implements OnInit {
 
    //función para comprobar si hay direcciones o no 
   comprobar() {
-    this.direccionService.getAllDirecciones().subscribe((datoo: any) => {
 
+
+    this.direccionService.getAllDirecciones().subscribe((datoo: any) => {
 
       this.todo = datoo.data['0'];
       this.todo = Array.of(this.todo);
+      this.info = this.todo;
+  
+
       this.comprobacion = datoo.count;
         console.log('todo: ', this.todo)
         console.log('conversor: ', this.comprobacion);
