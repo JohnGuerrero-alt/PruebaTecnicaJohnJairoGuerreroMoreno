@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import  {Constantes} from '../modules/enviroment';
 import  { Usuario} from '../modules/usuario.interface';
+import {ResponseI} from '../modules/estatus.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,16 @@ export class DireccionesService {
   getAllDirecciones(): Observable<any>{
     
     let headerr = new HttpHeaders().set('Content-Type', '	application/json')
-    return this.http.get(this.constantes['0'].urlgetAllDirecciones, {
-      headers: headerr
-    });  
+    return this.http.get(this.constantes['0'].urlgetAllDirecciones, {headers: headerr});  
   }
 
-  crearDireccion(form:Usuario ): Observable<any>{
-    return this.http.post(this.constantes['0'].urlcrearDireccion, form);
-  }
+  
+  crearDireccion(form:Usuario): Observable<any>{
+    
+     let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.post(this.constantes['0'].urlcrearDireccion, form, {headers: httpHeaders});
+
+  
+  } 
 
 }

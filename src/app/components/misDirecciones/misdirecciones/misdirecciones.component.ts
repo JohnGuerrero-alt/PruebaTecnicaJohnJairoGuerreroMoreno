@@ -4,6 +4,7 @@ import {  FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms'
 import  {listaCiudades} from '../../../modules/listas';
 import { Constantes} from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
+import { Observable } from 'rxjs';
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -48,13 +49,13 @@ export class MisdireccionesComponent implements OnInit {
 
   });
 
+
+  postId;
+
   constructor( private direccionService: DireccionesService, private formulario: FormBuilder) {
     
     this.comprobar();
     this.inicializarFormulario();
-    console.log(this.constantes['0'].urlcrearDireccion);
-
-    
 
    }
 
@@ -102,28 +103,25 @@ export class MisdireccionesComponent implements OnInit {
       detalle: ['', Validators.required],
       telefono1: [ '', Validators.required],
       telefono2: [null],
-      ciudad: [ '', Validators.required],
+      ciudad: [ '2', ],
       codigoPostal: ['', Validators.required],
       instruccionesEntrega: [''],
       pais: [this.constantes['0'].pais],
       correo: [this.constantes['0'].correo],
-      departamento: [''],
+      departamento: ['10'],
       createdAt: [new Date().toISOString()]
 
     })
   }
 
-  enviarDatos(form: Usuario){
-     this.direccionService.crearDireccion(form).subscribe( data => {
-       console.log(data);
-     })
-    
-  } 
-    
-
-
   
- 
+ enviarDatos(form: Usuario){
+   console.log(form);
+  this.direccionService.crearDireccion(form).subscribe( (dato :any) => {
+    console.log('dato: ', dato );
+  })
+   
+ }
 
   ngOnInit(): void {
   }
