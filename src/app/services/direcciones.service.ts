@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs';
 import  {Constantes} from '../modules/enviroment';
+import  { Usuario} from '../modules/usuario.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,8 @@ export class DireccionesService {
     });  
   }
 
-  crearDireccion(): Observable<any>{
-    let headerr = new HttpHeaders().set('Content-Type', '	application/json')
-    return this.http.post(this.constantes['0'].urlcrearDireccion, {
-      headers: headerr
-    }); 
+  crearDireccion(form:Usuario ): Observable<any>{
+    return this.http.post(this.constantes['0'].urlcrearDireccion, form);
   }
 
 }

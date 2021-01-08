@@ -3,7 +3,6 @@
         display: grid;
         min-height: 85vh;
         max-height: 85vh;
-        border: 3px solid springgreen;
         grid-template-columns: 1fr 2fr;
         grid-template-rows: 1fr;
         position: fixed;
@@ -16,7 +15,6 @@
         display: flex;
         max-height: 80vh;
         box-sizing: border-box;
-        border: 3px solid turquoise;
         justify-content: center;
         align-items: center;
     }
@@ -24,7 +22,6 @@
     .carousel {
         min-height: 100%;
         max-height: 550px;
-        border: 2px solid violet;
         width: 600px
     }
 
@@ -110,7 +107,6 @@
     .contenedor {
         display: grid;
         min-height: 85vh;
-        border: 3px solid springgreen;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 2fr;
         max-height: 85vh;
@@ -122,13 +118,11 @@
     /* Código para el carrusel de imagenes */
     .carousell {
         box-sizing: border-box;
-        border: 10px solid tomato;
         min-height: 83vh;
     }
     
     .carousel {
         max-height: 450px;
-        border: 1px solid blueviolet;
     }
 
     
@@ -143,7 +137,6 @@
         width: 300px;
         height: 500px;
         border-radius: 4px;
-        border: 10px solid teal;
         
     }
 
@@ -184,11 +177,17 @@
     }
 
     .card-image {
+        padding-top: 10px;
+        width: 75%;
+        text-align: center;
+        margin: 0 auto;
 
     }
     .card-image img {
 
-        width: 700px;
+        width: 100%;
+        max-height: 200px;
+        border-radius: 10px;
     }
   
     

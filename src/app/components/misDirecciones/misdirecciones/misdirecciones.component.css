@@ -66,7 +66,6 @@ button {
     .main-contain {
         width: 100vw;
         height: 85vh;
-        border: 10px solid blueviolet;
         position: fixed;
         overflow: auto;
         margin-top: 120px;
@@ -82,7 +81,6 @@ button {
         display: grid;
         grid-template-columns: 100%;
         grid-template-rows: 1fr 2fr 1fr;
-        border: 10px solid black;
         
     }
 
@@ -123,7 +121,6 @@ button {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: 1fr 7fr;
-        border: 10px solid #1d73be;
         min-width: 100%;
         min-height: 100%;
         
@@ -142,7 +139,6 @@ button {
          display: flex;
          flex-direction: row;
          flex-wrap: wrap;
-         border: 1px solid springgreen;
          margin-left: 40px;
          margin-right: 40px;
      }
@@ -183,7 +179,6 @@ button {
         display: flex;
         flex-direction: column;
         justify-content: space-around;
-        border: 1px solid turquoise;
         margin-top: 10px;
         margin-bottom: 10px;
      }
@@ -202,7 +197,6 @@ button {
      .card-footer {
          text-align: right;
          font-weight: bold;
-         border: 1px solid teal;
      }
 
      .card-footer span {
@@ -246,7 +240,6 @@ button {
     }
 
     textarea::placeholder{
-        border: 1px solid black;
         padding: 10px; 
         font-size: 10px;
         color: #1c3144;
@@ -274,6 +267,6 @@ button {
 
 }
 
-/* Adaptar a pantallas menores de 768px */
+
 
 

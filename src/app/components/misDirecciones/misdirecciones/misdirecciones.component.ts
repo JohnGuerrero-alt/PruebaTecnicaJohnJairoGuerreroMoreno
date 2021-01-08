@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DireccionesService} from '../../../services/direcciones.service';
-import {  FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {  FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import  {listaCiudades} from '../../../modules/listas';
 import { Constantes} from '../../../modules/enviroment';
-import { map, filter} from 'rxjs/operators'; 
-import {pipe, of} from 'rxjs';
+import { Usuario } from 'src/app/modules/usuario.interface';
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -26,18 +25,35 @@ export class MisdireccionesComponent implements OnInit {
   constantes: any = Constantes;
   city: any = listaCiudades;
   comprobacion: any;
-  correo: any;
   todo: any;
-  public infor: any;
   value: any;
-//private fb: FormBuilder
 
-  myForm: FormGroup;  
+
+
+//private fb: FormBuilder
+  myForm = new FormGroup({
+
+    correo: new FormControl(''),
+    pais: new FormControl(''),
+    departamento: new FormControl(''),
+    ciudad: new FormControl(''),
+    telefono1: new FormControl(''),
+    telefono2: new FormControl(''),
+    nombreEntrega: new FormControl(''),
+    direccion: new FormControl(''),
+    codigoPostal: new FormControl(''),
+    detalle: new FormControl(''),
+    instruccionesEntrega: new FormControl(''),
+    createdAt: new FormControl('')
+
+  });
+
   constructor( private direccionService: DireccionesService, private formulario: FormBuilder) {
     
     this.comprobar();
     this.inicializarFormulario();
-    
+    console.log(this.constantes['0'].urlcrearDireccion);
+
     
 
    }
@@ -51,7 +67,6 @@ export class MisdireccionesComponent implements OnInit {
 
       this.todo = datoo.data['0'];
       this.todo = Array.of(this.todo);
-      this.infor = this.todo;
       this.comprobacion = datoo.count;
         console.log('todo: ', this.todo)
         console.log('conversor: ', this.comprobacion);
@@ -91,7 +106,6 @@ export class MisdireccionesComponent implements OnInit {
       codigoPostal: ['', Validators.required],
       instruccionesEntrega: [''],
       pais: [this.constantes['0'].pais],
-      _id: [''],
       correo: [this.constantes['0'].correo],
       departamento: [''],
       createdAt: [new Date().toISOString()]
@@ -99,26 +113,19 @@ export class MisdireccionesComponent implements OnInit {
     })
   }
 
-  enviarDatos(value){
-    console.log('city            :' , this.city);
+  enviarDatos(form: Usuario){
+     this.direccionService.crearDireccion(form).subscribe( data => {
+       console.log(data);
+     })
     
-    console.log(value);
-    value = Array.of(value);
-    console.log(' value.ciudad: ', value['0'].ciudad);
-    console.log('ciudad.nom_mpio: ', this.city);
-    value = value['0'];
-    this.value = value;
+  } 
     
-    this.direccionService.crearDireccion().subscribe((datoo:any ) => {
-      
-    });
 
 
-  }
+  
  
 
   ngOnInit(): void {
-    
   }
 
 }
