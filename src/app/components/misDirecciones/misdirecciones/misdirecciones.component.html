@@ -36,8 +36,8 @@
                 <h5>Agregar</h5>
             </div>
             <!-- *ngFor="let array of todo"-->
-            <div class="card-address"  >
-                <div class="card-address-content" *ngFor="let info of todo">
+            <div class="card-address" *ngFor="let info of todo" >
+                <div class="card-address-content" >
                     <p class="nombreEntrega">{{info.nombreEntrega}}</p>
                     <p class="text-item-card">{{info.direccion + ' ' +info.detalle}}</p>
                     <p class="text-item-card">Bogotá</p>

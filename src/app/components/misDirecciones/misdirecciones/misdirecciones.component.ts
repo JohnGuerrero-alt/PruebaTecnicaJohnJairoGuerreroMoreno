@@ -4,8 +4,8 @@ import {  FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms'
 import  {listaCiudades} from '../../../modules/listas';
 import { Constantes} from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
-import { Observable } from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Observable} from 'rxjs';
+import {map , filter} from 'rxjs/operators';
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -24,12 +24,23 @@ export class MisdireccionesComponent implements OnInit {
   cItem: boolean = false;
 
 
-  constantes: any = Constantes;
   city: any = listaCiudades;
   comprobacion: any;
   todo: any;
   value: any;
   info: any;
+
+
+  //constantes para la correción
+
+  direcciones : any;
+  misDirecciones : any;
+  environment: any = Constantes;
+
+
+  //////////////////////////////
+
+
 
 
 
@@ -56,49 +67,52 @@ export class MisdireccionesComponent implements OnInit {
 
   constructor( private direccionService: DireccionesService, private formulario: FormBuilder) {
     
-    this.comprobar();
+   this.buscarDirecciones();
     this.inicializarFormulario();
+    
 
    }
 
 
+   //buscar direcciones
+  buscarDirecciones(){
+    console.log('Constantes: ' , this.environment['0'].useremail);
+    this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail).subscribe(
+      data => this.mostrarRegistroDirecciones(data),
+      error => console.error(error.statusText),
+    );
+  }
 
-   //función para comprobar si hay direcciones o no 
-  comprobar() {
 
-
-    this.direccionService.getAllDirecciones().subscribe((datoo: any) => {
-
-      this.todo = datoo.data['0'];
-      this.todo = Array.of(this.todo);
-      this.info = this.todo;
-  
-
-      this.comprobacion = datoo.count;
-        console.log('todo: ', this.todo)
-        console.log('conversor: ', this.comprobacion);
+  mostrarRegistroDirecciones(dato:any){
+    console.log('data: ', dato)
+    if(dato.data !== null && dato.data !== undefined) {
+      this.direcciones = dato.objeto;
+      console.log('data.objeto: ',dato.data)
       
-        //comprobando que no hay direcciones inicialice el diseño a
-        if(this.comprobacion==0){
-          this.bItem = false;
-          this.aItem = true;
-          console.log('diseño a: ', this.aItem);
-        } // si una o mas direcciones inicialice el diseño b
-        else {
-          this.bItem = true;
-          this.aItem = false;
-          console.log('diseño b: ', this.bItem);
-          //ahora que detecte la ciudad
+    }
 
-          console.log('ciudad: ', listaCiudades);  
-          console.log('city: ' , this.city)
-          console.log('pais: ', this.constantes['0'].pais)
+    this.actualizarPantalla(dato.count);
+    this.todo = dato.data;
+  }
 
-        }
-  
-      });  
+  actualizarPantalla(datos:any){
+     //comprobando que no hay direcciones inicialice el diseño a
+     if(datos==0){
+      this.bItem = false;
+      this.aItem = true;
+      console.log('diseño a: ', this.aItem);
+    } // si una o mas direcciones inicialice el diseño b
+    else {
+      this.bItem = true;
+      this.aItem = false;
+      console.log('diseño b: ', this.bItem);
+    }
+
 
   }
+
+
 
   //funcion para inicializar  los datos que va recibir el item c-new address
   inicializarFormulario(){
@@ -112,8 +126,8 @@ export class MisdireccionesComponent implements OnInit {
       ciudad: [ '2', ],
       codigoPostal: ['', Validators.required],
       instruccionesEntrega: [''],
-      pais: [this.constantes['0'].pais],
-      correo: [this.constantes['0'].correo],
+      pais: [Constantes['0'].pais],
+      correo: [Constantes['0'].correo],
       departamento: ['10'],
       createdAt: [new Date().toISOString()]
 
