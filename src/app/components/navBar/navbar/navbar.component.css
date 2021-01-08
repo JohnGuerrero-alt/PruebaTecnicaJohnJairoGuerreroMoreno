@@ -1,0 +1,46 @@
+ @media screen {
+    .navv{
+        width: 100%;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-content: center;
+
+    }
+
+
+    nav {
+        position: fixed;
+        z-index: 10;
+        left: 0;
+        right: 0;
+        top: 0;
+        background-color: #e3f3ff;
+        border: 1px solid  #b35057;
+        box-shadow: none; 
+        height: 120px;
+        
+    }
+    
+    .logo{
+
+        margin-top: 30px;
+        margin-left: 40px;
+        width: 140px;
+    }
+    
+    
+    nav div ul li a{
+
+        color: #1c3144;
+        font-size: 20px;
+        font-weight: bold;
+        min-width: 100px; 
+        margin-right: 30px;
+        margin-top: 25px;
+    }
+
+}
+

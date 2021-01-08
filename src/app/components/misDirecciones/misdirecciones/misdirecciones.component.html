@@ -1,0 +1,148 @@
+<!-- a. My addresses empty-->
+<!--  style="border: 1px solid black;"                      -->
+<div class="main-contain">
+
+    <div class="address-empty" *ngIf="aItem">
+        <div class="a-cont-first">
+            <p>Tus direcciones</p>
+        </div>
+
+        <div class="a-cont-second">
+           <img src='../../../../assets/imagenes/NoAddress.png'> 
+        </div>
+
+
+        <div class="a-cont-third">
+            <p>No tienes direcciones</p>
+            <span (click)="aItem= false; cItem=true;">Agregar direcciones</span>
+        </div>
+
+    </div>
+
+
+
+
+    <!--  b. My addresses -->
+    <div class="my-address" *ngIf="bItem">
+        <div class="b-cont-first" >
+            <p >Tus direcciones</p>
+        </div>
+
+        <div class="b-cont-second">
+            <div class="card-add">
+                <div>
+                    <img src="../../../../assets/imagenes/add.png" style="width: 80px;" (click)="bItem= false; cItem=true;">
+                </div>
+                <h5>Agregar</h5>
+            </div>
+            <!-- *ngFor="let array of todo"-->
+            <div class="card-address"  >
+                <div class="card-address-content" *ngFor="let info of todo">
+                    <p class="nombreEntrega">{{info.nombreEntrega}}</p>
+                    <p class="text-item-card">{{info.direccion + ' ' +info.detalle}}</p>
+                    <p class="text-item-card">Bogotá</p>
+                    <p class="text-item-card">{{'Teléfono: ' + info.telefono1}}</p>
+                    <p class="text-item-card">{{'Instrucciones de envío: '+ info.instruccionesEntrega}}</p>
+                </div>
+                <div class="card-footer">
+                    <span class="card-edit">Editar</span>
+                    <p>&nbsp;|&nbsp;</p>
+                    <span class="card-delete">Remover</span>
+                </div>
+            </div>
+    
+
+        </div>
+
+        
+        
+    
+    
+    </div>
+
+
+    <!-- c. New addresses -->
+    
+    <div class="new-address" *ngIf="cItem">
+        <ul class="breadcrumbs" style="border: 1px solid black;">
+            <li class="breadcrumbs-item">
+                <span class="breadcrumbs-link" (click)="cItem=false; comprobar();">Tus direcciones</span>
+            </li>
+            <li class="breadcrumbs-item">
+                <p>&nbsp; › &nbsp; </p>
+            </li>
+            <li class="breadcrumbs-item">
+                <p id="dinamyc-breadcrumb">Agregar dirección</p>
+            </li>
+            <p class="titulo-agregar">Agregar dirección</p>
+        </ul>
+
+    <!-- Formulario my address-->
+    
+
+        <form [formGroup]="myForm" (ngSubmit)="enviarDatos(myForm.value)">     
+            
+            <div class="box-item">
+                <label>
+                    Nombre completo
+                </label>
+                <input formControlName="nombreEntrega" type="text" class="">
+            </div>
+            
+            <div class="box-item">
+                <label>
+                    Dirección
+                </label>
+                <input formControlName="direccion" type="text">
+            </div>
+            <div class="box-item">
+                <label>
+                    Apartamento, suite, unidad, edificio, piso, etc.
+                </label>
+                <input formControlName="detalle" type="text">
+            </div>
+            <div class="box-item">
+                <label>
+                    Teléfono 1
+                </label>
+                <input formControlName="telefono1" type="text">
+            </div>
+            <div class="box-item">
+                <label>
+                    Teléfono 2
+                </label>
+                <input formControlName="telefono2" type="text">
+            </div> 
+            <div class="box-item">
+                <label>
+                    Ciudad
+                </label>
+                <select class="browser-default" formControlName="ciudad">
+                    <option *ngFor="let ciudad of city ">{{ciudad.nom_mpio}}</option>
+                    
+                </select>
+
+            </div>
+            <div class="box-item">
+                <label>
+                    Código Postal
+                </label>
+                <input type="text" formControlName="codigoPostal">
+            </div>
+            <div class="box-item">
+                <label>
+                    Instrucciones de entrega
+                </label>
+                <textarea name="" id="" cols="30" rows="10" placeholder="Incluye detalles como nombre del conjunto, restricciones a la hora de la entrega o señas de como llegar" formControlName="instruccionesEntrega"></textarea>
+            </div>
+            <div class="box-item">
+                <button [disabled]="myForm.invalid" type="submit">Agregar dirección</button>
+            </div>
+    
+        </form> 
+    
+    </div>
+    
+    
+
+</div>

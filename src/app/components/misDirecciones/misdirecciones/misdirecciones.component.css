@@ -1,0 +1,279 @@
+p {
+    color: #1c3144;
+}
+
+a {
+    color: #1c3144;
+}
+
+.breadcrumbs {
+    padding: 10px;
+    font-size: 10px;
+}
+
+.breadcrumbs-item {
+    display: inline-block;
+}
+
+.breadcrumbs-link {
+    text-decoration: none;
+}
+
+span {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+
+
+input, select{
+    width: 100%;
+    border: 1px solid #b35057 !important;
+    background-color: white !important;   
+    height: 4vh !important;
+}
+
+
+textarea {
+    width: 100%;
+    border: 1px solid #b35057 !important;
+    background-color: white !important;   
+    height: 7vh ;
+}
+
+
+.box-item label{
+    display: block;
+    text-align: left;
+}
+
+button {
+    min-width: 20vw;
+    min-height: 40px;
+    display: block;
+    background-color: #b35057;
+    color: white;
+    border-radius: 4px;
+    margin: 8px auto; 
+    box-shadow: none;
+
+}
+
+/*  Para pantallas mayores a 768px de alto      //////////////////////////////////////////////////   */
+
+@media screen{
+    /*Contenido principal  */
+    .main-contain {
+        width: 100vw;
+        height: 85vh;
+        border: 10px solid blueviolet;
+        position: fixed;
+        overflow: auto;
+        margin-top: 120px;
+    }
+
+
+    
+     /* Primer diseño my address-empty Letra A */ 
+     /* ********************************************************************************* */
+    .address-empty {
+        width: 100%;
+        max-height: 100%;
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 1fr 2fr 1fr;
+        border: 10px solid black;
+        
+    }
+
+    
+    .a-cont-first{
+        font-size: 30px;
+        font-weight: bold;
+        padding-top: 70px;
+        padding-left: 100px;
+    }
+    
+    .address-empty .a-cont-second {
+        text-align: center;
+    }
+
+    .address-empty .a-cont-second img{
+       min-width: 30%;
+       max-height: 40vh;
+    
+    }
+    
+    .address-empty .a-cont-third { 
+        padding-top: 20px; 
+        font-size: 20px;
+        font-weight: 500;
+        text-align: center;    
+    }
+    
+    .address-empty .a-cont-third span {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    
+     /* Segundo diseño my address Letra B */ 
+     /********************************************************************************************** */
+
+     .my-address {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 7fr;
+        border: 10px solid #1d73be;
+        min-width: 100%;
+        min-height: 100%;
+        
+     }
+
+     .b-cont-first {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         margin-left: 40px;
+         font-size: 30px;
+         font-weight: bold;
+     }
+
+     .b-cont-second {
+         display: flex;
+         flex-direction: row;
+         flex-wrap: wrap;
+         border: 1px solid springgreen;
+         margin-left: 40px;
+         margin-right: 40px;
+     }
+
+     .card-add {
+        display: flex; 
+        flex-direction: column;
+        border: 1px solid #b35057;
+        border-radius: 10px;
+        background-color: #f6f9ff;
+        /*min-width: 200px; */
+        width: 330px;
+        min-height: 250px;
+        max-height: 250px;
+        justify-content: center;
+        align-items: center;
+        margin-right: 40px;
+     }
+
+     .card-address {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 10fr 1fr;
+        border: 1px solid #b35057;
+        border-radius: 10px;
+        background-color: #f6f9ff;
+        min-width: 330px;
+        max-width: 330px;
+        max-height: 250px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-bottom: 10px;
+        justify-content: space-between;
+        margin-right: 20px;
+     }
+
+     .card-address-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        border: 1px solid turquoise;
+        margin-top: 10px;
+        margin-bottom: 10px;
+     }
+
+     .card-address-content .nombreEntrega {
+        font-weight: bold;
+        color: #1c3144
+     }
+
+     .card-address-content .text-item-card {
+         font-weight: 500;
+         color: #1c3144
+        
+     }
+
+     .card-footer {
+         text-align: right;
+         font-weight: bold;
+         border: 1px solid teal;
+     }
+
+     .card-footer span {
+         text-decoration: none;
+         color: #1c3144;
+         padding-left: 5px;
+         padding-right: 5px;
+     }
+
+     .card-footer p {
+         display: inline;
+         color: #b35057;
+         font-weight: 400;
+         font-size: large;
+     }
+
+
+     
+
+     .card-add div img {
+        cursor: pointer;
+     }
+
+     .card-add h5 {
+         font-weight: bold;
+     }
+
+
+
+    /* Tercer diseño new address Letra c */
+    /*************************************************************************************************/
+     .new-address {
+        max-width: 50vh;
+        margin: 10px auto;
+    }
+
+    .new-address form label {
+        font-size: 17px;
+        color: #1c3144;
+        font-weight: 500;
+    }
+
+    textarea::placeholder{
+        border: 1px solid black;
+        padding: 10px; 
+        font-size: 10px;
+        color: #1c3144;
+        font-weight: 300;
+        text-align: justify;
+    }
+
+    .new-address ul {
+        text-align: center;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
+    .new-address .titulo-agregar {
+        padding-top: -10px;
+        text-align: left;
+        font-size: 20px;
+        font-weight: bold;
+        color: #1c3144;
+    }
+
+    .box-item {
+        padding-bottom: 10px;
+    }
+
+}
+
+/* Adaptar a pantallas menores de 768px */
+
+
