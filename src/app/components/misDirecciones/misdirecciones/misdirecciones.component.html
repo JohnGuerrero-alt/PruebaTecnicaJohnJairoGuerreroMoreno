@@ -47,7 +47,7 @@
                 <div class="card-footer">
                     <span class="card-edit">Editar</span>
                     <p>&nbsp;|&nbsp;</p>
-                    <span class="card-delete">Remover</span>
+                    <span class="card-delete"  (click)="deleteDireccion();">Remover</span>
                 </div>
             </div>
     
@@ -66,7 +66,7 @@
     <div class="new-address" *ngIf="cItem">
         <ul class="breadcrumbs">
             <li class="breadcrumbs-item">
-                <span class="breadcrumbs-link" (click)="cItem=false; comprobar();">Tus direcciones</span>
+                <span class="breadcrumbs-link" (click)="cItem=false; buscarDirecciones();">Tus direcciones</span>
             </li>
             <li class="breadcrumbs-item">
                 <p>&nbsp; › &nbsp; </p>

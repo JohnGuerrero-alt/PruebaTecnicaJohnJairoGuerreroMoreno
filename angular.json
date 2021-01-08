@@ -26,10 +26,12 @@
             "styles": [
               "./node_modules/normalize.css/normalize.css",
               "./node_modules/materialize-css/dist/css/materialize.css",
+              "./node_modules/sweetalert2/dist/sweetalert2.css",
               "src/styles.css"
             ],
             "scripts": [
-              "./node_modules/materialize-css/dist/js/materialize.min.js"
+              "./node_modules/materialize-css/dist/js/materialize.min.js",
+              "./node_modules/sweetalert2/dist/sweetalert2.js"
             ]
           },
           "configurations": {

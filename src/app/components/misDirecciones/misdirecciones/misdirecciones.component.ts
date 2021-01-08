@@ -4,8 +4,9 @@ import {  FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms'
 import  {listaCiudades} from '../../../modules/listas';
 import { Constantes} from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
-import { Observable} from 'rxjs';
-import {map , filter} from 'rxjs/operators';
+import { Observable , pipe} from 'rxjs';
+import { tap  } from 'rxjs/operators';
+import Swal from 'sweetalert2';
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -36,6 +37,7 @@ export class MisdireccionesComponent implements OnInit {
   direcciones : any;
   misDirecciones : any;
   environment: any = Constantes;
+  id : any = '5ff8025cf13759969f51b082';
 
 
   //////////////////////////////
@@ -77,28 +79,25 @@ export class MisdireccionesComponent implements OnInit {
    //buscar direcciones
   buscarDirecciones(){
     console.log('Constantes: ' , this.environment['0'].useremail);
-    this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail).subscribe(
+    this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail)
+    .subscribe(
       data => this.mostrarRegistroDirecciones(data),
       error => console.error(error.statusText),
     );
   }
 
-
   mostrarRegistroDirecciones(dato:any){
     console.log('data: ', dato)
     if(dato.data !== null && dato.data !== undefined) {
-      this.direcciones = dato.objeto;
-      console.log('data.objeto: ',dato.data)
-      
+      this.actualizarPantalla(dato.count);
+      //guarda los datos en la variable que extraera los datos las cardview
+      this.todo = dato.data;
     }
-
-    this.actualizarPantalla(dato.count);
-    this.todo = dato.data;
   }
 
   actualizarPantalla(datos:any){
      //comprobando que no hay direcciones inicialice el diseño a
-     if(datos==0){
+     if(datos.count==0){
       this.bItem = false;
       this.aItem = true;
       console.log('diseño a: ', this.aItem);
@@ -111,6 +110,7 @@ export class MisdireccionesComponent implements OnInit {
 
 
   }
+
 
 
 
@@ -136,10 +136,56 @@ export class MisdireccionesComponent implements OnInit {
 
   
  enviarDatos(form: Usuario){
-   console.log(form);
+  console.log(form);
   this.direccionService.crearDireccion(form).subscribe( (dato :any) => {
     console.log('dato: ', dato );
+    Swal.fire({
+      title : 'Envio de información',
+      text : 'Se ha enviado la información exitosamente',
+      icon: 'success',
+      confirmButtonText : 'Cerrar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cItem = false;
+        this.bItem = true;
+      }
+    })
+    
   })
+  this.buscarDirecciones();
+
+ }
+
+ deleteDireccion( ){
+   const id = '5ff86decf13759969f51b088';
+   console.log('borrar: ', id);
+
+   Swal.fire({
+    title: '¿ Seguro que deseas eliminar esta dirección ?',
+    text: "Los cambios no podrán ser revertidos",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Si, Borrar!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.direccionService.eliminarDireccion(id).subscribe( 
+        (dato:any) => {
+         console.log(dato);
+        } 
+        );
+      Swal.fire(
+        'Borrado!',
+        'La dirección ha sido borrada',
+        'success'
+      )
+      this.bItem = true;
+    }
+  })
+
+
+
    
  }
 
