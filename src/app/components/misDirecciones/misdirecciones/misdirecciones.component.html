@@ -45,9 +45,9 @@
                     <p class="text-item-card">{{'Instrucciones de envío: '+ info.instruccionesEntrega}}</p>
                 </div>
                 <div class="card-footer">
-                    <span class="card-edit">Editar</span>
+                    <span class="card-edit" (click)="editDireciones();" >Editar</span>
                     <p>&nbsp;|&nbsp;</p>
-                    <span class="card-delete"  (click)="deleteDireccion();">Remover</span>
+                    <span class="card-delete"  (click)="deleteDireccion(info._id, info.direccion);">Remover</span>
                 </div>
             </div>
     
@@ -74,7 +74,7 @@
             <li class="breadcrumbs-item">
                 <p id="dinamyc-breadcrumb">Agregar dirección</p>
             </li>
-            <p class="titulo-agregar">Agregar dirección</p>
+            <p class="titulo-agregar" id="agregareditar">Agregar dirección</p>
         </ul>
 
     <!-- Formulario my address-->

@@ -118,6 +118,7 @@ export class MisdireccionesComponent implements OnInit {
   inicializarFormulario(){
     this.myForm = this.formulario.group({
 
+      _id: [],
       nombreEntrega: ['', Validators.required],
       direccion: [ '', Validators.required],
       detalle: ['', Validators.required],
@@ -156,18 +157,18 @@ export class MisdireccionesComponent implements OnInit {
 
  }
 
- deleteDireccion( ){
-   const id = '5ff86decf13759969f51b088';
+ deleteDireccion(id: any , direccion:any){
    console.log('borrar: ', id);
 
    Swal.fire({
-    title: '¿ Seguro que deseas eliminar esta dirección ?',
-    text: "Los cambios no podrán ser revertidos",
+    title: '¿ Deseas eliminar '+ direccion + ' ?',
+    text: "Una vez eliminado, no podrás obtenerlo de nuevo",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, Borrar!'
+    confirmButtonText: 'Si, eliminar!',
+    cancelButtonText: 'No, cancelar'
   }).then((result) => {
     if (result.isConfirmed) {
       this.direccionService.eliminarDireccion(id).subscribe( 
@@ -183,11 +184,14 @@ export class MisdireccionesComponent implements OnInit {
       this.bItem = true;
     }
   })
-
-
-
-   
  }
+
+ editDireciones(){
+   document.getElementById('agregareditar').innerHTML = "Editar dirección";
+ }
+
+
+
 
   ngOnInit(): void {
   }
