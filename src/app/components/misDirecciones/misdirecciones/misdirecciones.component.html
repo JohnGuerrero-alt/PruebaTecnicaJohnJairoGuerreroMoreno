@@ -14,7 +14,7 @@
 
         <div class="a-cont-third">
             <p>No tienes direcciones</p>
-            <span (click)="aItem= false; cItem=true;">Agregar direcciones</span>
+            <span (click)="aItem= false; cItem=true; botonActualizar= false; botonAgregar=true;">Agregar direcciones</span>
         </div>
 
     </div>
@@ -31,7 +31,7 @@
         <div class="b-cont-second">
             <div class="card-add">
                 <div>
-                    <img src="../../../../assets/imagenes/add.png" style="width: 80px;" (click)="bItem= false; cItem=true;">
+                    <img src="../../../../assets/imagenes/add.png" style="width: 80px;" (click)="bItem= false; cItem=true; this.myForm.controls['direccion'].enable();">
                 </div>
                 <h5>Agregar</h5>
             </div>
@@ -45,7 +45,7 @@
                     <p class="text-item-card">{{'Instrucciones de envío: '+ info.instruccionesEntrega}}</p>
                 </div>
                 <div class="card-footer">
-                    <span class="card-edit" (click)="editDireciones();" >Editar</span>
+                    <span class="card-edit" (click)="uploadDireccion(info); bItem= false; cItem= true; direccion_campo= true;" >Editar</span>
                     <p>&nbsp;|&nbsp;</p>
                     <span class="card-delete"  (click)="deleteDireccion(info._id, info.direccion);">Remover</span>
                 </div>
@@ -93,7 +93,7 @@
                 <label>
                     Dirección
                 </label>
-                <input formControlName="direccion" type="text">
+                <input formControlName="direccion"  type="text">
             </div>
             <div class="box-item">
                 <label>
@@ -133,10 +133,10 @@
                 <label>
                     Instrucciones de entrega
                 </label>
-                <textarea name="" id="" cols="30" rows="10" placeholder="Incluye detalles como nombre del conjunto, restricciones a la hora de la entrega o señas de como llegar" formControlName="instruccionesEntrega"></textarea>
+                <textarea name="" cols="30" rows="10" placeholder="Incluye detalles como nombre del conjunto, restricciones a la hora de la entrega o señas de como llegar" formControlName="instruccionesEntrega"></textarea>
             </div>
             <div class="box-item">
-                <button [disabled]="myForm.invalid" type="submit">Agregar dirección</button>
+                <button [disabled]="myForm.invalid" type="submit" >Agregar dirección</button>
             </div>
     
         </form> 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DireccionesService} from '../../../services/direcciones.service';
-import {  FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import  {listaCiudades} from '../../../modules/listas';
-import { Constantes} from '../../../modules/enviroment';
+import { DireccionesService } from '../../../services/direcciones.service';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { listaCiudades } from '../../../modules/listas';
+import { Constantes } from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
-import { Observable , pipe} from 'rxjs';
-import { tap  } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
 
@@ -17,38 +17,22 @@ import Swal from 'sweetalert2';
   styleUrls: ['./misdirecciones.component.css']
 })
 export class MisdireccionesComponent implements OnInit {
-
-  
-
+  //habilitar o desabilitar cada item del diseño
   aItem: boolean = false;
   bItem: boolean = false;
   cItem: boolean = false;
 
+  direccionCampo: boolean = false; //habilitar o no el campo direccion cuando se edita la direccion
 
-  city: any = listaCiudades;
-  comprobacion: any;
+  city: any = listaCiudades; //utilizado en el select del  misdirecciones.component.html
   todo: any;
-  value: any;
-  info: any;
 
-
-  //constantes para la correción
-
-  direcciones : any;
-  misDirecciones : any;
+  direcciones: any;
+  misDirecciones: any;
   environment: any = Constantes;
-  id : any = '5ff8025cf13759969f51b082';
 
 
-  //////////////////////////////
-
-
-
-
-
-//private fb: FormBuilder
   myForm = new FormGroup({
-
     correo: new FormControl(''),
     pais: new FormControl(''),
     departamento: new FormControl(''),
@@ -64,40 +48,37 @@ export class MisdireccionesComponent implements OnInit {
 
   });
 
+  constructor(private direccionService: DireccionesService, private formulario: FormBuilder) {
 
-  postId;
-
-  constructor( private direccionService: DireccionesService, private formulario: FormBuilder) {
-    
-   this.buscarDirecciones();
+    this.buscarDirecciones();
     this.inicializarFormulario();
-    
 
-   }
-
-
-   //buscar direcciones
-  buscarDirecciones(){
-    console.log('Constantes: ' , this.environment['0'].useremail);
-    this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail)
-    .subscribe(
-      data => this.mostrarRegistroDirecciones(data),
-      error => console.error(error.statusText),
-    );
   }
 
-  mostrarRegistroDirecciones(dato:any){
+
+  //buscar direcciones
+  buscarDirecciones() {
+    console.log('Constantes: ', this.environment['0'].useremail);
+    this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail)
+      .subscribe(
+        data => this.mostrarRegistroDirecciones(data),
+        error => console.error(error.statusText),
+      );
+  }
+
+  mostrarRegistroDirecciones(dato: any) {
     console.log('data: ', dato)
-    if(dato.data !== null && dato.data !== undefined) {
+    if (dato.data !== null && dato.data !== undefined) {
       this.actualizarPantalla(dato.count);
       //guarda los datos en la variable que extraera los datos las cardview
       this.todo = dato.data;
     }
   }
 
-  actualizarPantalla(datos:any){
-     //comprobando que no hay direcciones inicialice el diseño a
-     if(datos.count==0){
+  actualizarPantalla(datos: any) {
+    //comprobando que no hay direcciones inicialice el diseño a
+    console.log('datos.count ', datos);
+    if (datos === 0) {
       this.bItem = false;
       this.aItem = true;
       console.log('diseño a: ', this.aItem);
@@ -112,19 +93,17 @@ export class MisdireccionesComponent implements OnInit {
   }
 
 
-
-
   //funcion para inicializar  los datos que va recibir el item c-new address
-  inicializarFormulario(){
+  inicializarFormulario() {
     this.myForm = this.formulario.group({
 
       _id: [],
       nombreEntrega: ['', Validators.required],
-      direccion: [ '', Validators.required],
+      direccion: ['', Validators.required],
       detalle: ['', Validators.required],
-      telefono1: [ '', Validators.required],
+      telefono1: ['', Validators.required],
       telefono2: [null],
-      ciudad: [ '2', ],
+      ciudad: ['2',],
       codigoPostal: ['', Validators.required],
       instruccionesEntrega: [''],
       pais: [Constantes['0'].pais],
@@ -135,63 +114,115 @@ export class MisdireccionesComponent implements OnInit {
     })
   }
 
-  
- enviarDatos(form: Usuario){
-  console.log(form);
-  this.direccionService.crearDireccion(form).subscribe( (dato :any) => {
-    console.log('dato: ', dato );
+
+  enviarDatos(form: Usuario) {
+    console.log(form);
+    console.log(form._id);
+    if (form._id === null) {
+      this.direccionService.crearDireccion(form).subscribe((dato: any) => {
+        console.log('dato: ', dato);
+        Swal.fire({
+          title: 'Envio de información',
+          text: 'Se ha enviado la información exitosamente',
+          icon: 'success',
+          confirmButtonText: 'Cerrar'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.cItem = false;
+            this.bItem = true;
+          }
+        })
+
+      })
+    }
+    else {
+
+      var nuevo_form = {
+        "correo": form.correo,
+        "pais": form.pais,
+        "departamento": form.departamento,
+        "ciudad": form.ciudad,
+        "telefono1": form.telefono1,
+        "telefono2": form.telefono2,
+        "nombreEntrega": form.nombreEntrega,
+        "codigoPostal": form.codigoPostal,
+        "detalle": form.detalle,
+        "instruccionesEntrega": form.instruccionesEntrega
+      }
+
+      this.direccionService.actualizarDireccion(nuevo_form, form._id).subscribe(
+        (dato: any) => {
+          console.log('dato actualizado: ', dato);
+
+          Swal.fire({
+            title: 'Actualización de la informacion',
+            text: 'Se ha actualizado la información exitosamente',
+            icon: 'success',
+            confirmButtonText: 'Cerrar'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.cItem = false;
+              this.bItem = true;
+            }
+          })
+
+        }
+      )
+
+    }
+
+  }
+
+
+  uploadDireccion(form: Usuario){
+    
+    
+
+    this.myForm.patchValue({
+      "_id": form._id,
+      "nombreEntrega": form.nombreEntrega,
+      "direccion": form.direccion,
+      "detalle": form.detalle,
+      "telefono1": form.telefono1,
+      "telefono2": form.telefono2,
+      "codigoPostal": form.codigoPostal,
+      "instruccionesEntrega": form.instruccionesEntrega
+    })
+
+    this.myForm.controls['direccion'].disable();
+
+  }
+
+
+  deleteDireccion(id: any, direccion: any) {
+    console.log('borrar: ', id);
+
     Swal.fire({
-      title : 'Envio de información',
-      text : 'Se ha enviado la información exitosamente',
-      icon: 'success',
-      confirmButtonText : 'Cerrar'
+      title: '¿ Deseas eliminar ' + direccion + ' ?',
+      text: "Una vez eliminado, no podrás obtenerlo de nuevo",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!',
+      cancelButtonText: 'No, cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cItem = false;
+        this.direccionService.eliminarDireccion(id).subscribe(
+          (dato: any) => {
+            console.log(dato);
+          }
+        );
+        Swal.fire(
+          'Borrado!',
+          'La dirección ha sido borrada',
+          'success'
+        )
         this.bItem = true;
       }
     })
-    
-  })
-  this.buscarDirecciones();
 
- }
-
- deleteDireccion(id: any , direccion:any){
-   console.log('borrar: ', id);
-
-   Swal.fire({
-    title: '¿ Deseas eliminar '+ direccion + ' ?',
-    text: "Una vez eliminado, no podrás obtenerlo de nuevo",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Si, eliminar!',
-    cancelButtonText: 'No, cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      this.direccionService.eliminarDireccion(id).subscribe( 
-        (dato:any) => {
-         console.log(dato);
-        } 
-        );
-      Swal.fire(
-        'Borrado!',
-        'La dirección ha sido borrada',
-        'success'
-      )
-      this.bItem = true;
-    }
-  })
- }
-
- editDireciones(){
-   document.getElementById('agregareditar').innerHTML = "Editar dirección";
- }
-
-
-
+  }
 
   ngOnInit(): void {
   }

@@ -25,10 +25,16 @@ export class DireccionesService {
   }
 
  
+  actualizarDireccion(form: any, id: any) {
+    let httpheaders = new HttpHeaders().set('Content-Type', 'application/json')
+    return this.http.put(this.environment['0'].urlbase+id, form, {headers: httpheaders});
+  }
+
+
   crearDireccion(form:Usuario): Observable<any>{
     
      let httpHeaders = new HttpHeaders().set('Content-Type', 'application/json')
-    return this.http.post(this.environment['0'].urlcrearDireccion, form, {headers: httpHeaders}).pipe(
+    return this.http.post(this.environment['0'].urlbase, form, {headers: httpHeaders}).pipe(
       tap(() => {
         this._refresh$.next();
       })
@@ -38,7 +44,7 @@ export class DireccionesService {
 
   eliminarDireccion(id:any){
     const httpheaders = new HttpHeaders().set('Content-Type', 'application/json')
-    const url = this.environment['0'].urleliminarDireccion + id; 
+    const url = this.environment['0'].urlbase + id; 
     return this.http.delete(url, {headers: httpheaders});
   }
 
@@ -51,7 +57,9 @@ export class DireccionesService {
 
   getDireccionById(id:any){
 
+    const parametros = new HttpHeaders().set('Content-Type', 'application/json')
     const url = this.environment['0'].urleliminarDireccion+id;
+    return this.http.get(url, {headers: parametros} );
     
   }
 
