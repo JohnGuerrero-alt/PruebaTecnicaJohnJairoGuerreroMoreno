@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DireccionesService } from '../../../services/direcciones.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { listaCiudades } from '../../../modules/listas';
 import { Constantes } from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
-import { Observable, pipe } from 'rxjs';
+import { Observable, pipe, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 
@@ -16,21 +16,15 @@ import Swal from 'sweetalert2';
   templateUrl: './misdirecciones.component.html',
   styleUrls: ['./misdirecciones.component.css']
 })
-export class MisdireccionesComponent implements OnInit {
+export class MisdireccionesComponent implements OnInit , OnDestroy{
   //habilitar o desabilitar cada item del diseño
   aItem: boolean = false;
   bItem: boolean = false;
   cItem: boolean = false;
-
-  direccionCampo: boolean = false; //habilitar o no el campo direccion cuando se edita la direccion
-
   city: any = listaCiudades; //utilizado en el select del  misdirecciones.component.html
   todo: any;
-
-  direcciones: any;
-  misDirecciones: any;
   environment: any = Constantes;
-
+  suscription: Subscription; //para realizar el refresh
 
   myForm = new FormGroup({
     correo: new FormControl(''),
@@ -49,14 +43,13 @@ export class MisdireccionesComponent implements OnInit {
   });
 
   constructor(private direccionService: DireccionesService, private formulario: FormBuilder) {
-
     this.buscarDirecciones();
     this.inicializarFormulario();
-
+    this.suscription = this.direccionService.refresh$.subscribe(() => {
+      this.buscarDirecciones();
+    })
   }
 
-
-  //buscar direcciones
   buscarDirecciones() {
     console.log('Constantes: ', this.environment['0'].useremail);
     this.direccionService.getAllDireccionByCorreo(this.environment['0'].useremail)
@@ -70,33 +63,26 @@ export class MisdireccionesComponent implements OnInit {
     console.log('data: ', dato)
     if (dato.data !== null && dato.data !== undefined) {
       this.actualizarPantalla(dato.count);
-      //guarda los datos en la variable que extraera los datos las cardview
-      this.todo = dato.data;
+        this.todo = dato.data; //guarda los datos en la variable que extraera los datos las cardview
     }
   }
 
   actualizarPantalla(datos: any) {
-    //comprobando que no hay direcciones inicialice el diseño a
     console.log('datos.count ', datos);
     if (datos === 0) {
       this.bItem = false;
       this.aItem = true;
       console.log('diseño a: ', this.aItem);
-    } // si una o mas direcciones inicialice el diseño b
-    else {
+    } 
+    else {  // si una o mas direcciones inicialice el diseño b
       this.bItem = true;
       this.aItem = false;
       console.log('diseño b: ', this.bItem);
     }
-
-
   }
-
-
-  //funcion para inicializar  los datos que va recibir el item c-new address
-  inicializarFormulario() {
+  
+  inicializarFormulario() {//funcion para inicializar  los datos que va recibir el item c-new address
     this.myForm = this.formulario.group({
-
       _id: [],
       nombreEntrega: ['', Validators.required],
       direccion: ['', Validators.required],
@@ -110,10 +96,8 @@ export class MisdireccionesComponent implements OnInit {
       correo: [Constantes['0'].correo],
       departamento: ['10'],
       createdAt: [new Date().toISOString()]
-
     })
   }
-
 
   enviarDatos(form: Usuario) {
     console.log(form);
@@ -130,13 +114,12 @@ export class MisdireccionesComponent implements OnInit {
           if (result.isConfirmed) {
             this.cItem = false;
             this.bItem = true;
+            this.myForm.reset();
           }
         })
-
       })
     }
     else {
-
       var nuevo_form = {
         "correo": form.correo,
         "pais": form.pais,
@@ -149,11 +132,9 @@ export class MisdireccionesComponent implements OnInit {
         "detalle": form.detalle,
         "instruccionesEntrega": form.instruccionesEntrega
       }
-
       this.direccionService.actualizarDireccion(nuevo_form, form._id).subscribe(
         (dato: any) => {
           console.log('dato actualizado: ', dato);
-
           Swal.fire({
             title: 'Actualización de la informacion',
             text: 'Se ha actualizado la información exitosamente',
@@ -163,22 +144,20 @@ export class MisdireccionesComponent implements OnInit {
             if (result.isConfirmed) {
               this.cItem = false;
               this.bItem = true;
+              this.myForm.reset();
             }
           })
-
         }
       )
-
     }
-
   }
 
-
-  uploadDireccion(form: Usuario){
-    
-    
-
+  exportarDatosDireccion(form: Usuario) {
     this.myForm.patchValue({
+      "ciudad": form.ciudad,
+      "pais": form.pais,
+      "departamento": form.departamento,
+      "correo": form.correo,
       "_id": form._id,
       "nombreEntrega": form.nombreEntrega,
       "direccion": form.direccion,
@@ -188,15 +167,11 @@ export class MisdireccionesComponent implements OnInit {
       "codigoPostal": form.codigoPostal,
       "instruccionesEntrega": form.instruccionesEntrega
     })
-
     this.myForm.controls['direccion'].disable();
-
   }
-
 
   deleteDireccion(id: any, direccion: any) {
     console.log('borrar: ', id);
-
     Swal.fire({
       title: '¿ Deseas eliminar ' + direccion + ' ?',
       text: "Una vez eliminado, no podrás obtenerlo de nuevo",
@@ -221,10 +196,14 @@ export class MisdireccionesComponent implements OnInit {
         this.bItem = true;
       }
     })
-
   }
 
   ngOnInit(): void {
+
+  }
+
+  ngOnDestroy(): void {
+
   }
 
 }
