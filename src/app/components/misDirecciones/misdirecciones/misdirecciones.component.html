@@ -9,7 +9,7 @@
         </div>
         <div class="a-cont-third">
             <p>No tienes direcciones</p>
-            <span (click)="aItem= false; cItem=true; botonActualizar= false; botonAgregar=true;">Agregar
+            <span (click)="aItem= false; cItem=true; dinamyc_breadcrumb='Agregar direccion'; " >Agregar
                 direcciones</span>
         </div>
     </div>
@@ -22,21 +22,21 @@
             <div class="card-add">
                 <div>
                     <img src="../../../../assets/imagenes/add.png" style="width: 80px;"
-                        (click)="bItem= false; cItem=true; this.myForm.controls['direccion'].enable(); inicializarFormulario();">
+                        (click)="bItem= false; cItem=true; this.myForm.controls['direccion'].enable(); inicializarFormulario();dinamyc_breadcrumb='Agregar dirección'; ">
                 </div>
                 <h5>Agregar</h5>
             </div>
-            <div class="card-address" *ngFor="let info of todo">
+            <div class="card-address" *ngFor="let info of todo" >
                 <div class="card-address-content">
                     <p class="nombreEntrega">{{info.nombreEntrega}}</p>
                     <p class="text-item-card">{{info.direccion + ' ' +info.detalle}}</p>
-                    <p class="text-item-card">Bogotá</p>
+                    <p class="text-item-card" >{{info.ciudad}}</p>
                     <p class="text-item-card">{{'Teléfono: ' + info.telefono1}}</p>
                     <p class="text-item-card">{{'Instrucciones de envío: '+ info.instruccionesEntrega}}</p>
                 </div>
                 <div class="card-footer">
                     <span class="card-edit"
-                        (click)="exportarDatosDireccion(info); bItem= false; cItem= true; direccion_campo= true;">Editar</span>
+                        (click)="exportarDatosDireccion(info); bItem= false; cItem= true; dinamyc_breadcrumb='Editar dirección'; obtenerValor() ">Editar</span>
                     <p>&nbsp;|&nbsp;</p>
                     <span class="card-delete" (click)="deleteDireccion(info._id, info.direccion);">Remover</span>
                 </div>
@@ -54,9 +54,9 @@
                 <p>&nbsp; › &nbsp; </p>
             </li>
             <li class="breadcrumbs-item">
-                <p id="dinamyc-breadcrumb">Agregar dirección</p>
+                <p id="dinamyc-breadcrumb">{{dinamyc_breadcrumb}}</p>
             </li>
-            <p class="titulo-agregar" id="agregareditar">Agregar dirección</p>
+            <p class="titulo-agregar" id="agregareditar">{{dinamyc_breadcrumb}}</p>
         </ul>
         <!-- Formulario my address-->
         <form [formGroup]="myForm" (ngSubmit)="enviarDatos(myForm.value); buscarDirecciones()">
@@ -64,45 +64,55 @@
                 <label>
                     Nombre completo
                 </label>
-                <input formControlName="nombreEntrega" type="text" class="">
+                <input formControlName="nombreEntrega" required  type="text" class="validate">
+                <span  class="helper-text" data-error="Campo obligatorio" data-success=""></span>
+               
             </div>
             <div class="box-item">
                 <label>
                     Dirección
                 </label>
-                <input formControlName="direccion" type="text">
+                <input formControlName="direccion" required type="text" class="validate">
+                <span class="helper-text" data-error="Campo obligatorio" data-success=""></span>
             </div>
             <div class="box-item">
                 <label>
                     Apartamento, suite, unidad, edificio, piso, etc.
                 </label>
-                <input formControlName="detalle" type="text">
+                <input formControlName="detalle" required type="text" class="validate">
+                <span class="helper-text" data-error="Campo obligatorio" data-success=""></span>
             </div>
             <div class="box-item">
                 <label>
                     Teléfono 1
                 </label>
-                <input formControlName="telefono1" type="text">
+                <input formControlName="telefono1" required type="text" class="validate">
+                <span *ngIf="myForm.get('telefono1').hasError('maxlength')" class="helper-text red-text" data-error="" data-success="">Excediendo longitud máxima</span>
+                <span class="helper-text" data-error="Campo obligatorio" data-success=""></span>
+            
             </div>
             <div class="box-item">
                 <label>
                     Teléfono 2
                 </label>
                 <input formControlName="telefono2" type="text">
+                <span *ngIf="myForm.get('telefono2').hasError('maxlength')" class="helper-text red-text" data-error="" data-success="">Excediendo longitud máxima</span>
             </div>
             <div class="box-item">
                 <label>
                     Ciudad
                 </label>
-                <select class="browser-default">
-                    <option *ngFor="let ciudad of city ">{{ciudad.nom_mpio}}</option>
+                <select formControlName="ciudad" required class="browser-default"  (change)="obtenerValor();" [(ngModel)]="codigo_ciudad" > 
+                    <option  [ngValue]="ciudades" *ngFor="let ciudades of city " [selected]="nombre_ciudad"  >{{ciudades.nom_mpio}}</option >
                 </select>
+                
             </div>
             <div class="box-item">
                 <label>
                     Código Postal
                 </label>
-                <input type="text" formControlName="codigoPostal">
+                <input type="text" required formControlName="codigoPostal" class="validate">
+                <span class="helper-text" data-error="Campo obligatorio" data-success=""></span>
             </div>
             <div class="box-item">
                 <label>
@@ -118,3 +128,4 @@
         </form>
     </div>
 </div>
+

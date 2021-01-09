@@ -30,8 +30,9 @@ input, select{
     width: 100%;
     border: 1px solid #b35057 !important;
     background-color: white !important;   
-    height: 4vh !important;
+    height: 6vh !important;
 }
+
 
 
 textarea {

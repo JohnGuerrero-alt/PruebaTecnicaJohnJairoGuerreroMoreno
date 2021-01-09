@@ -4,9 +4,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { listaCiudades } from '../../../modules/listas';
 import { Constantes } from '../../../modules/enviroment';
 import { Usuario } from 'src/app/modules/usuario.interface';
-import { Observable, pipe, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import Swal from 'sweetalert2';
+
 
 
 //import { ConsoleReporter } from 'jasmine';
@@ -16,15 +17,21 @@ import Swal from 'sweetalert2';
   templateUrl: './misdirecciones.component.html',
   styleUrls: ['./misdirecciones.component.css']
 })
-export class MisdireccionesComponent implements OnInit , OnDestroy{
+export class MisdireccionesComponent implements OnInit, OnDestroy {
   //habilitar o desabilitar cada item del diseño
   aItem: boolean = false;
   bItem: boolean = false;
   cItem: boolean = false;
   city: any = listaCiudades; //utilizado en el select del  misdirecciones.component.html
   todo: any;
+  codigo_ciudad: any;
+  nombre_ciudad: any = 'valor';
+  codDepto: any;
   environment: any = Constantes;
+  dinamyc_breadcrumb: any;
   suscription: Subscription; //para realizar el refresh
+
+  unoo: any;
 
   myForm = new FormGroup({
     correo: new FormControl(''),
@@ -45,9 +52,7 @@ export class MisdireccionesComponent implements OnInit , OnDestroy{
   constructor(private direccionService: DireccionesService, private formulario: FormBuilder) {
     this.buscarDirecciones();
     this.inicializarFormulario();
-    this.suscription = this.direccionService.refresh$.subscribe(() => {
-      this.buscarDirecciones();
-    })
+
   }
 
   buscarDirecciones() {
@@ -63,7 +68,7 @@ export class MisdireccionesComponent implements OnInit , OnDestroy{
     console.log('data: ', dato)
     if (dato.data !== null && dato.data !== undefined) {
       this.actualizarPantalla(dato.count);
-        this.todo = dato.data; //guarda los datos en la variable que extraera los datos las cardview
+      this.todo = dato.data; //guarda los datos en la variable que extraera los datos las cardview
     }
   }
 
@@ -73,35 +78,46 @@ export class MisdireccionesComponent implements OnInit , OnDestroy{
       this.bItem = false;
       this.aItem = true;
       console.log('diseño a: ', this.aItem);
-    } 
+    }
     else {  // si una o mas direcciones inicialice el diseño b
       this.bItem = true;
       this.aItem = false;
       console.log('diseño b: ', this.bItem);
     }
+    console.log("city codigo:" , Array.of(this.city));
   }
-  
+
   inicializarFormulario() {//funcion para inicializar  los datos que va recibir el item c-new address
     this.myForm = this.formulario.group({
       _id: [],
       nombreEntrega: ['', Validators.required],
       direccion: ['', Validators.required],
       detalle: ['', Validators.required],
-      telefono1: ['', Validators.required],
-      telefono2: [null],
-      ciudad: ['2',],
+      telefono1: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
+      telefono2: [null, Validators.maxLength(15)],
+      ciudad: ['', Validators.maxLength(6)],
       codigoPostal: ['', Validators.required],
       instruccionesEntrega: [''],
-      pais: [Constantes['0'].pais],
-      correo: [Constantes['0'].correo],
-      departamento: ['10'],
+      pais: [Constantes['0'].pais, Validators.maxLength(2)],
+      correo: [Constantes['0'].correo, Validators.maxLength(50)],
+      departamento: ['', Validators.maxLength(3)],
       createdAt: [new Date().toISOString()]
     })
+  }
+
+  obtenerValor() {
+    console.log("Valores ciudad:", this.codigo_ciudad);
+    console.log("codigo: ", this.codigo_ciudad);
   }
 
   enviarDatos(form: Usuario) {
     console.log(form);
     console.log(form._id);
+    form.departamento = this.codigo_ciudad.cod_depto;
+    form.ciudad = this.codigo_ciudad.cod_mpio;
+    console.log('departamento: ', form.departamento);
+    console.log('codigo ciud: ', form.ciudad);
+
     if (form._id === null) {
       this.direccionService.crearDireccion(form).subscribe((dato: any) => {
         console.log('dato: ', dato);
@@ -167,6 +183,7 @@ export class MisdireccionesComponent implements OnInit , OnDestroy{
       "codigoPostal": form.codigoPostal,
       "instruccionesEntrega": form.instruccionesEntrega
     })
+    console.log('console todoo:', this.todo);
     this.myForm.controls['direccion'].disable();
   }
 
@@ -199,11 +216,13 @@ export class MisdireccionesComponent implements OnInit , OnDestroy{
   }
 
   ngOnInit(): void {
-
+    this.suscription = this.direccionService.refresh$.subscribe(() => {
+      this.buscarDirecciones();
+    })
   }
 
   ngOnDestroy(): void {
-
+    this.suscription.unsubscribe();
   }
 
 }
